@@ -19,6 +19,11 @@ const router = createRouter({
       name: 'todoDetail',
       component: () => import('@/views/TodoDetailView.vue'),
     },
+    {
+      path: '/create/:id',
+      name: 'update',
+      component: () => import('@/views/CreateView.vue'),
+    },
   ],
 })
 

@@ -1,14 +1,23 @@
 <script setup>
 import { reactive } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useTodoStore } from '@/store/TodoStore'
+const store = useTodoStore()
+const route = useRoute()
+const router = useRouter()
 const userData = reactive({
-    email: '',
-    phone: '',
-    name: '',
-    website: '',
+    email: route.params.id ? store.detailUser.email: '',
+    phone: route.params.id ? store.detailUser.phone: '',
+    name: route.params.id ? store.detailUser.name: '',
 })
 
-const handleCreateNewData = async () => {
-    console.log(userData)
+const handleCreateNewData = () => {
+    store.handleCreateUser({id:String(Math.random()) ,...userData})
+    router.push('/')
+}
+const handleUpdateData = () => {
+    store.handleUpdateUser({id:route.params.id ,...userData})
+    router.push('/')
 }
 </script>
 <template>
@@ -23,15 +32,11 @@ const handleCreateNewData = async () => {
         <input type="text" placeholder="Enter Name Here!" v-model="userData.name">
       </div>
       <div style="margin-top: 1rem;">
-        <label for="">Website:</label>
-        <input type="text" placeholder="Enter Website Here!" v-model="userData.website">
-      </div>
-      <div style="margin-top: 1rem;">
         <label for="">Phone:</label>
         <input type="text" placeholder="Enter Phone Here!" v-model="userData.phone">
       </div>
-      <div style="display: flex;" @click="handleCreateNewData">
-        <div class="btn-main" style="margin-top: 1rem; border-radius:50px;"> Create new</div>
+      <div style="display: flex;" @click="route.params.id ? handleUpdateData() : handleCreateNewData()">
+        <div class="btn-main" style="margin-top: 1rem; border-radius:50px;"> {{ route.params.id ? 'Update' : 'Create' }}</div>
       </div>
       
     </main>
